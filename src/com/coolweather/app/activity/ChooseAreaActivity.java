@@ -80,10 +80,10 @@ public class ChooseAreaActivity extends Activity {
 					int position, long id) {
 				if(currentLevel == LEVEL_PROVINCE){
 					selectedProvince = provinceList.get(position);
-					//queryCities();
+					queryCities();
 				}else if(currentLevel == LEVEL_CITY){
 					selectedCity = cityList.get(position);
-					//queryCounties();
+					queryCounties();
 				}
 			}
 		});
@@ -121,7 +121,7 @@ public class ChooseAreaActivity extends Activity {
 			}
 			adapter.notifyDataSetChanged();
 			listView.setSelection(0);
-			titleText.setText(selectedProvince.getId());
+			titleText.setText(selectedProvince.getProvinceName());
 			currentLevel = LEVEL_CITY;
 		}else {
 			queryFromServer(selectedProvince.getProvinceCode(), "city");
@@ -140,7 +140,7 @@ public class ChooseAreaActivity extends Activity {
 			}
 			adapter.notifyDataSetChanged();
 			listView.setSelection(0);
-			titleText.setText(selectedCity.getId());
+			titleText.setText(selectedCity.getCityName());
 			currentLevel = LEVEL_COUNTY;
 		}else {
 			queryFromServer(selectedCity.getCityCode(), "county");
@@ -190,7 +190,7 @@ public class ChooseAreaActivity extends Activity {
 			}
 			@Override
 			public void onError(Exception e) {
-				//通过runOnUiThread()方法回到主线程处理逻辑
+				//通过runOnUiThread()方法回到主线程处理逻辑,网络错误时调用。
 				runOnUiThread(new Runnable(){
 					@Override
 					public void run() {
@@ -217,14 +217,16 @@ public class ChooseAreaActivity extends Activity {
 	 * 关闭对话框
 	 */
 	private void closeProgressDialog(){
-		progressDialog.dismiss();
+		if(progressDialog != null){
+			progressDialog.dismiss();
+		}
 	}
 	
 	@Override
 	public void onBackPressed() {
 		if(currentLevel == LEVEL_COUNTY){
 			queryCities();
-		}else if(currentLevel == LEVEL_COUNTY){
+		}else if(currentLevel == LEVEL_CITY){
 			queryProvinces();
 		}else{
 			finish();

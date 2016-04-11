@@ -117,7 +117,7 @@ import android.database.sqlite.SQLiteDatabase;
 		if(county != null){
 			ContentValues values = new ContentValues();
 			values.put("county_name", county.getCountyName());
-			values.put("county_code", county.getCountyName());
+			values.put("county_code", county.getCountyCode());
 			values.put("city_id", county.getCityId());
 			db.insert("County", null, values);
 		}
@@ -128,7 +128,7 @@ import android.database.sqlite.SQLiteDatabase;
 	 */
 	public List<County> loadCounties(int cityId){
 		List<County> list = new ArrayList<County>();
-		Cursor cursor = db.query("County", null, "province_id = ?",
+		Cursor cursor = db.query("County", null, "city_id = ?",
 				new String[]{String.valueOf(cityId)}, null, null, null);
 		if(cursor.moveToFirst()){
 			do{
